@@ -1,0 +1,6 @@
+BasedOnStyle: WebKit
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+IndentCaseLabels: true
+IndentWidth: 4
+NamespaceIndentation: All
