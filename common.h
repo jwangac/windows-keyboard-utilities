@@ -55,26 +55,19 @@ static int alt_pressed()
     return lalt_pressed() || ralt_pressed();
 }
 
-static DWORD scancode_flags(WORD vkCode)
+static int lwin_pressed()
 {
-    double dwFlags;
-    {
-        if (vkCode == VK_LWIN
-            || vkCode == VK_RWIN
-            || vkCode == VK_APPS
-            || vkCode == VK_RCONTROL
-            || vkCode == VK_RMENU
-            || vkCode == VK_LEFT
-            || vkCode == VK_DOWN
-            || vkCode == VK_UP
-            || vkCode == VK_RIGHT
-            || vkCode == VK_NEXT
-            || vkCode == VK_PRIOR)
-            dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_EXTENDEDKEY;
-        else
-            dwFlags = KEYEVENTF_SCANCODE;
-    }
-    return dwFlags;
+    return 0x8000 & GetKeyState(VK_LWIN);
+}
+
+static int rwin_pressed()
+{
+    return 0x8000 & GetKeyState(VK_RWIN);
+}
+
+static int win_pressed()
+{
+    return lwin_pressed() || rwin_pressed();
 }
 
 ULONG_PTR naive_hash(char* s)
@@ -87,14 +80,42 @@ ULONG_PTR naive_hash(char* s)
     return x;
 }
 
+static const int KEY_TYPE[256] = {
+    0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0,
+    1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+    1, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1, 2, 2, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0,
+    0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1
+};
+
 static void press(WORD vkCode, ULONG_PTR dwExtraInfo)
 {
+    DWORD dwFlags;
+
+    if (KEY_TYPE[vkCode] == 1)
+        dwFlags = KEYEVENTF_SCANCODE;
+    else if (KEY_TYPE[vkCode] == 2)
+        dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_EXTENDEDKEY;
+    else
+        return;
+
     INPUT input;
     {
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = 0;
         input.ki.wScan = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
-        input.ki.dwFlags = scancode_flags(vkCode);
+        input.ki.dwFlags = dwFlags;
         input.ki.time = 0;
         input.ki.dwExtraInfo = dwExtraInfo;
     }
@@ -103,12 +124,21 @@ static void press(WORD vkCode, ULONG_PTR dwExtraInfo)
 
 static void release(WORD vkCode, ULONG_PTR dwExtraInfo)
 {
+    DWORD dwFlags;
+
+    if (KEY_TYPE[vkCode] == 1)
+        dwFlags = KEYEVENTF_SCANCODE;
+    else if (KEY_TYPE[vkCode] == 2)
+        dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_EXTENDEDKEY;
+    else
+        return;
+
     INPUT input;
     {
         input.type = INPUT_KEYBOARD;
         input.ki.wVk = 0;
         input.ki.wScan = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC);
-        input.ki.dwFlags = scancode_flags(vkCode) | KEYEVENTF_KEYUP;
+        input.ki.dwFlags = dwFlags | KEYEVENTF_KEYUP;
         input.ki.time = 0;
         input.ki.dwExtraInfo = dwExtraInfo;
     }

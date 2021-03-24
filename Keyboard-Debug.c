@@ -1,0 +1,322 @@
+#include "common.h"
+
+#include <stdio.h>
+#include <string.h>
+
+const char* NAME[] = {
+    "0x00 Undefined",
+    "0x01 [VK_LBUTTON] Left mouse button",
+    "0x02 [VK_RBUTTON] Right mouse button",
+    "0x03 [VK_CANCEL] Control-break processing",
+    "0x04 [VK_MBUTTON] Middle mouse button",
+    "0x05 [VK_XBUTTON1] X1 mouse button",
+    "0x06 [VK_XBUTTON2] X2 mouse button",
+    "0x07 Undefined",
+    "0x08 [VK_BACK] Backspace",
+    "0x09 [VK_TAB] Tab",
+    "0x0a Reserved",
+    "0x0b Reserved",
+    "0x0c [VK_CLEAR] Clear",
+    "0x0d [VK_RETURN] Enter",
+    "0x0e Undefined",
+    "0x0f Undefined",
+    "0x10 [VK_SHIFT] Shift",
+    "0x11 [VK_CONTROL] Ctrl",
+    "0x12 [VK_MENU] Alt",
+    "0x13 [VK_PAUSE] Pause",
+    "0x14 [VK_CAPITAL] Caps Lock",
+    "0x15 [VK_HANGUL] IME Kana/Hangul mode",
+    "0x16 IME On",
+    "0x17 [VK_JUNJA] IME Junja mode",
+    "0x18 [VK_FINAL] IME final mode",
+    "0x19 [VK_KANJI] IME Hanja/Kanji mode",
+    "0x1a IME Off",
+    "0x1b [VK_ESCAPE] Esc",
+    "0x1c [VK_CONVERT] IME convert",
+    "0x1d [VK_NONCONVERT] IME nonconvert",
+    "0x1e [VK_ACCEPT] IME accept",
+    "0x1f [VK_MODECHANGE] IME mode change request",
+    "0x20 [VK_SPACE] Space",
+    "0x21 [VK_PRIOR] Page Up",
+    "0x22 [VK_NEXT] Page Down",
+    "0x23 [VK_END] End",
+    "0x24 [VK_HOME] Home",
+    "0x25 [VK_LEFT] Left Arrow",
+    "0x26 [VK_UP] Up Arrow",
+    "0x27 [VK_RIGHT] Right Arrow",
+    "0x28 [VK_DOWN] Down Arrow",
+    "0x29 [VK_SELECT] Select",
+    "0x2a [VK_PRINT] Print",
+    "0x2b [VK_EXECUTE] Execute",
+    "0x2c [VK_SNAPSHOT] Print Screen",
+    "0x2d [VK_INSERT] Ins",
+    "0x2e [VK_DELETE] Del",
+    "0x2f [VK_HELP] Help",
+    "0x30 ['0'] 0",
+    "0x31 ['1'] 1",
+    "0x32 ['2'] 2",
+    "0x33 ['3'] 3",
+    "0x34 ['4'] 4",
+    "0x35 ['5'] 5",
+    "0x36 ['6'] 6",
+    "0x37 ['7'] 7",
+    "0x38 ['8'] 8",
+    "0x39 ['9'] 9",
+    "0x3a Undefined",
+    "0x3b Undefined",
+    "0x3c Undefined",
+    "0x3d Undefined",
+    "0x3e Undefined",
+    "0x3f Undefined",
+    "0x40 Undefined",
+    "0x41 ['A'] A",
+    "0x42 ['B'] B",
+    "0x43 ['C'] C",
+    "0x44 ['D'] D",
+    "0x45 ['E'] E",
+    "0x46 ['F'] F",
+    "0x47 ['G'] G",
+    "0x48 ['H'] H",
+    "0x49 ['I'] I",
+    "0x4a ['J'] J",
+    "0x4b ['K'] K",
+    "0x4c ['L'] L",
+    "0x4d ['M'] M",
+    "0x4e ['N'] N",
+    "0x4f ['O'] O",
+    "0x50 ['P'] P",
+    "0x51 ['Q'] Q",
+    "0x52 ['R'] R",
+    "0x53 ['S'] S",
+    "0x54 ['T'] T",
+    "0x55 ['U'] U",
+    "0x56 ['V'] V",
+    "0x57 ['W'] W",
+    "0x58 ['X'] X",
+    "0x59 ['Y'] Y",
+    "0x5a ['Z'] Z",
+    "0x5b [VK_LWIN] Left Windows",
+    "0x5c [VK_RWIN] Right Windows",
+    "0x5d [VK_APPS] Applications",
+    "0x5e Reserved",
+    "0x5f [VK_SLEEP] Computer Sleep",
+    "0x60 [VK_NUMPAD0] Keypad 0",
+    "0x61 [VK_NUMPAD1] Keypad 1",
+    "0x62 [VK_NUMPAD2] Keypad 2",
+    "0x63 [VK_NUMPAD3] Keypad 3",
+    "0x64 [VK_NUMPAD4] Keypad 4",
+    "0x65 [VK_NUMPAD5] Keypad 5",
+    "0x66 [VK_NUMPAD6] Keypad 6",
+    "0x67 [VK_NUMPAD7] Keypad 7",
+    "0x68 [VK_NUMPAD8] Keypad 8",
+    "0x69 [VK_NUMPAD9] Keypad 9",
+    "0x6a [VK_MULTIPLY] Multiply",
+    "0x6b [VK_ADD] Add",
+    "0x6c [VK_SEPARATOR] Separator",
+    "0x6d [VK_SUBTRACT] Subtract",
+    "0x6e [VK_DECIMAL] Decimal",
+    "0x6f [VK_DIVIDE] Divide",
+    "0x70 [VK_F1] F1",
+    "0x71 [VK_F2] F2",
+    "0x72 [VK_F3] F3",
+    "0x73 [VK_F4] F4",
+    "0x74 [VK_F5] F5",
+    "0x75 [VK_F6] F6",
+    "0x76 [VK_F7] F7",
+    "0x77 [VK_F8] F8",
+    "0x78 [VK_F9] F9",
+    "0x79 [VK_F10] F10",
+    "0x7a [VK_F11] F11",
+    "0x7b [VK_F12] F12",
+    "0x7c [VK_F13] F13",
+    "0x7d [VK_F14] F14",
+    "0x7e [VK_F15] F15",
+    "0x7f [VK_F16] F16",
+    "0x80 [VK_F17] F17",
+    "0x81 [VK_F18] F18",
+    "0x82 [VK_F19] F19",
+    "0x83 [VK_F20] F20",
+    "0x84 [VK_F21] F21",
+    "0x85 [VK_F22] F22",
+    "0x86 [VK_F23] F23",
+    "0x87 [VK_F24] F24",
+    "0x88 Unassigned",
+    "0x89 Unassigned",
+    "0x8a Unassigned",
+    "0x8b Unassigned",
+    "0x8c Unassigned",
+    "0x8d Unassigned",
+    "0x8e Unassigned",
+    "0x8f Unassigned",
+    "0x90 [VK_NUMLOCK] Num Lock",
+    "0x91 [VK_SCROLL] Scroll Lock",
+    "0x92 [VK_OEM_FJ_JISHO] OEM specific",
+    "0x93 [VK_OEM_FJ_MASSHOU] OEM specific",
+    "0x94 [VK_OEM_FJ_TOUROKU] OEM specific",
+    "0x95 [VK_OEM_FJ_LOYA] OEM specific",
+    "0x96 [VK_OEM_FJ_ROYA] OEM specific",
+    "0x97 Unassigned",
+    "0x98 Unassigned",
+    "0x99 Unassigned",
+    "0x9a Unassigned",
+    "0x9b Unassigned",
+    "0x9c Unassigned",
+    "0x9d Unassigned",
+    "0x9e Unassigned",
+    "0x9f Unassigned",
+    "0xa0 [VK_LSHIFT] Left Shift",
+    "0xa1 [VK_RSHIFT] Right Shift",
+    "0xa2 [VK_LCONTROL] Left Control",
+    "0xa3 [VK_RCONTROL] Right Control",
+    "0xa4 [VK_LMENU] Left Alt",
+    "0xa5 [VK_RMENU] Right Alt",
+    "0xa6 [VK_BROWSER_BACK] Browser Back",
+    "0xa7 [VK_BROWSER_FORWARD] Browser Forward",
+    "0xa8 [VK_BROWSER_REFRESH] Browser Refresh",
+    "0xa9 [VK_BROWSER_STOP] Browser Stop",
+    "0xaa [VK_BROWSER_SEARCH] Browser Search",
+    "0xab [VK_BROWSER_FAVORITES] Browser Favorites",
+    "0xac [VK_BROWSER_HOME] Browser Start and Home",
+    "0xad [VK_VOLUME_MUTE] Volume Mute",
+    "0xae [VK_VOLUME_DOWN] Volume Down",
+    "0xaf [VK_VOLUME_UP] Volume Up",
+    "0xb0 [VK_MEDIA_NEXT_TRACK] Next Track",
+    "0xb1 [VK_MEDIA_PREV_TRACK] Previous Track",
+    "0xb2 [VK_MEDIA_STOP] Stop Media",
+    "0xb3 [VK_MEDIA_PLAY_PAUSE] Play/Pause Media",
+    "0xb4 [VK_LAUNCH_MAIL] Start Mail",
+    "0xb5 [VK_LAUNCH_MEDIA_SELECT] Select Media",
+    "0xb6 [VK_LAUNCH_APP1] Start Application 1",
+    "0xb7 [VK_LAUNCH_APP2] Start Application 2",
+    "0xb8 Reserved",
+    "0xb9 Reserved",
+    "0xba [VK_OEM_1] ;",
+    "0xbb [VK_OEM_PLUS] +",
+    "0xbc [VK_OEM_COMMA] ,",
+    "0xbd [VK_OEM_MINUS] -",
+    "0xbe [VK_OEM_PERIOD] .",
+    "0xbf [VK_OEM_2] /",
+    "0xc0 [VK_OEM_3] `",
+    "0xc1 Reserved",
+    "0xc2 Reserved",
+    "0xc3 Reserved",
+    "0xc4 Reserved",
+    "0xc5 Reserved",
+    "0xc6 Reserved",
+    "0xc7 Reserved",
+    "0xc8 Reserved",
+    "0xc9 Reserved",
+    "0xca Reserved",
+    "0xcb Reserved",
+    "0xcc Reserved",
+    "0xcd Reserved",
+    "0xce Reserved",
+    "0xcf Reserved",
+    "0xd0 Reserved",
+    "0xd1 Reserved",
+    "0xd2 Reserved",
+    "0xd3 Reserved",
+    "0xd4 Reserved",
+    "0xd5 Reserved",
+    "0xd6 Reserved",
+    "0xd7 Reserved",
+    "0xd8 Unassigned",
+    "0xd9 Unassigned",
+    "0xda Unassigned",
+    "0xdb [VK_OEM_4] [",
+    "0xdc [VK_OEM_5] \\",
+    "0xdd [VK_OEM_6] ]",
+    "0xde [VK_OEM_7] '",
+    "0xdf [VK_OEM_8] Unknown",
+    "0xe0 Reserved",
+    "0xe1 [VK_OEM_AX] OEM specific",
+    "0xe2 [VK_OEM_102] Unknown",
+    "0xe3 [VK_ICO_HELP] OEM specific",
+    "0xe4 [VK_ICO_00] OEM specific",
+    "0xe5 [VK_PROCESSKEY] IME PROCESS",
+    "0xe6 [VK_ICO_CLEAR] OEM specific",
+    "0xe7 [VK_PACKET] VK_PACKET",
+    "0xe8 Unassigned",
+    "0xe9 [VK_OEM_RESET] OEM specific",
+    "0xea [VK_OEM_JUMP] OEM specific",
+    "0xeb [VK_OEM_PA1] OEM specific",
+    "0xec [VK_OEM_PA2] OEM specific",
+    "0xed [VK_OEM_PA3] OEM specific",
+    "0xee [VK_OEM_WSCTRL] OEM specific",
+    "0xef [VK_OEM_CUSEL] OEM specific",
+    "0xf0 [VK_OEM_ATTN] OEM specific",
+    "0xf1 [VK_OEM_FINISH] OEM specific",
+    "0xf2 [VK_OEM_COPY] OEM specific",
+    "0xf3 [VK_OEM_AUTO] OEM specific",
+    "0xf4 [VK_OEM_ENLW] OEM specific",
+    "0xf5 [VK_OEM_BACKTAB] OEM specific",
+    "0xf6 [VK_ATTN] Attn",
+    "0xf7 [VK_CRSEL] CrSel",
+    "0xf8 [VK_EXSEL] ExSel",
+    "0xf9 [VK_EREOF] Erase EOF",
+    "0xfa [VK_PLAY] Play",
+    "0xfb [VK_ZOOM] Zoom",
+    "0xfc [VK_NONAME] Reserved",
+    "0xfd [VK_PA1] PA1",
+    "0xfe [VK_OEM_CLEAR] Clear",
+    "0xff Undefined"
+};
+
+char* getname(ULONG_PTR MAGIC)
+{
+    static char* names[] = {
+        "LCtrl-to-ESC.c",
+        "Quote-to-RCtrl.c",
+        "Tab-Navi.c",
+        "",
+        "Unknown Program"
+    };
+
+    char** name = names;
+    while (strlen(*name)) {
+        if (naive_hash(*name) == MAGIC)
+            return *name;
+        name++;
+    }
+    return *(name + 1);
+}
+
+LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if (nCode != HC_ACTION)
+        return CallNextHookEx(0, nCode, wParam, lParam);
+
+    KBDLLHOOKSTRUCT* lparam = (KBDLLHOOKSTRUCT*)lParam;
+
+    if (wParam == WM_KEYDOWN)
+        printf("   DOWN");
+    else if (wParam == WM_SYSKEYDOWN)
+        printf("SYSDOWN");
+    else if (wParam == WM_KEYUP)
+        printf("     UP");
+    else if (wParam == WM_SYSKEYUP)
+        printf("  SYSUP");
+    else
+        printf("???????");
+
+    printf(": %-50s", NAME[lparam->vkCode]);
+
+    if (lparam->dwExtraInfo)
+        printf(" by %s", getname(lparam->dwExtraInfo));
+
+    printf("\n");
+
+    return CallNextHookEx(0, nCode, wParam, lParam);
+}
+
+int main(void)
+{
+    CreateMutexA(NULL, FALSE, "WKU_" __FILE__ "_INSTANCE");
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+        return 1;
+
+    SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, NULL, 0);
+
+    MSG msg;
+    GetMessage(&msg, NULL, 0, 0);
+}
