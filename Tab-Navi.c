@@ -42,7 +42,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
                 break;
             }
 
-            if (MAP[lparam->vkCode][0]) {
+            if (MAP[lparam->vkCode][0] && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
                 state = MAPPING;
                 /* fallthrough */
             } else {
@@ -55,7 +55,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
                 return 1;
             }
 
-            if (MAP[lparam->vkCode][0]) {
+            if (MAP[lparam->vkCode][0] && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
                 mapping[lparam->vkCode] = 1;
             }
     }
